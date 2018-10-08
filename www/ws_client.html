@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ws_client</title>
+</head>
+<body>
+<h1>WebSocket_client</h1>
+<script>
+    var url = "ws://47.106.204.16:8811";
+    var websocket = new WebSocket(url);
+    websocket.onopen = function (ev) {
+        console.log("conected-swoole-success");
+        websocket.send('hello world');
+    };
+
+    websocket.onmessage = function (ev) {
+        console.log("ws-server-return-data: " + ev.data);
+    };
+
+    websocket.onclose =function (ev) {
+        console.log('ws-server-closed')
+    };
+
+    websocket.onerror = function (ev,e) {
+        console.log("error: " +ev.data);
+    };
+
+</script>
+</body>
+</html>
