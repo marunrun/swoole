@@ -7,21 +7,42 @@
 <body>
 <h1>WebSocket_client</h1>
 <script>
-    var url = "ws://47.106.204.16:8811";
+    var url = "ws://runrun520.cn:8812";
+    //实例对象的onopen属性
     var websocket = new WebSocket(url);
+
+    /**
+     * 监听WebSocket连接
+     * @param ev
+     */
     websocket.onopen = function (ev) {
         console.log("conected-swoole-success");
+        //给服务端发送消息
         websocket.send('hello world');
     };
 
+    /**
+     * 监听接收消息事件
+     * @param ev
+     */
     websocket.onmessage = function (ev) {
-        console.log("ws-server-return-data: " + ev.data);
+        console.log(ev.data);
     };
 
+
+    /**
+     * 监听连接关闭事件
+     * @param ev
+     */
     websocket.onclose =function (ev) {
         console.log('ws-server-closed')
     };
 
+    /**
+     * 监听错误信息
+     * @param ev
+     * @param e
+     */
     websocket.onerror = function (ev,e) {
         console.log("error: " +ev.data);
     };

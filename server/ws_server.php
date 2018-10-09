@@ -1,34 +1,49 @@
 <?php
+
+$server = new swoole_websocket_server("0.0.0.0", 8812);
+
+    $server->set([
+        'enable_static_handler' =>  true,
+        'document_root' => '/home/marun/code/demo/www'
+    ]);
+
+
+$server->on('open', 'onOpen');
+$server->on('message','onMessage');
+$server->on('close', 'onClose');
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018-09-02
- * Time: 18:11
+ * 监听连接打开事件
+ * @param $server
+ * @param $request
  */
+function onOpen ($server , $request){
 
-//创建websocket服务器对象，监听0.0.0.0:9502端口
-$ws = new swoole_websocket_server("0.0.0.0", 8811);
+    foreach ($server->connections as $fd){
+        var_dump($fd);
+    }
+//    print_r($request);
+}
 
-$ws->set([
-    'enable_static_handler'     => true, //开启静态页面
-    'document_root'             => "/home/marun/code/demo/www"  //设置静态页面的根目录
-]);
+/**
+ * 监听接收消息事件
+ * @param $server
+ * @param $frame
+ */
+function onMessage ($server, $frame){
+//    var_dump($server->connections);
+    $server->push($frame->fd,date("Y-m-d H:i:s",time())." data: ".$frame->data." finish:".$frame->finish." fd: ".$frame->fd." opcode: ".$frame->opcode);
+}
 
-//监听WebSocket连接打开事件
-$ws->on('open', function ($ws, $request) {
-    var_dump($request->fd, $request->get, $request->server);
-    $ws->push($request->fd, "hello, welcome\n");
-});
+function onClose($server, $fd ,$reactorId){
 
-//监听WebSocket消息事件
-$ws->on('message', function ($ws, $frame) {
-    echo "Message: {$frame->data}\n";
-    $ws->push($frame->fd, "server: {$frame->data}");
-});
+    foreach ($server->connections as $v){
+        if($fd != $v){
+            $server->push($v,"fd {$fd} is closed");
+        }
 
-//监听WebSocket连接关闭事件
-$ws->on('close', function ($ws, $fd) {
-    echo "client {$fd} is closed\n";
-});
+    }
 
-$ws->start();
+}
+
+
+$server->start();
