@@ -10,10 +10,10 @@ $serv->set([
 ]);
 
 //监听数据接收事件
-$serv->on('Packet', function ($serv, $data, $clientInfo) {
-$serv->sendto($clientInfo['address'], $clientInfo['port'], "Servers ".$data);
-var_dump($clientInfo);
+$serv->on('packet',function ($serv,$data,$client_info){
+        $serv->sendto($client_info['address'],$client_info['port'],$data,$client_info['server_socket']);
+        print_r($client_info);
 });
 
 //启动服务器
-$serv->start(); 
+$serv->start();

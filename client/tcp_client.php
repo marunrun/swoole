@@ -1,30 +1,34 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018-09-02
- * Time: 10:36
- */
-/**
- *  SWOOLE_SOCK_TCP 代表TCP模式
- */
+//连接 swoole tcp服务端
 $client = new swoole_client(SWOOLE_SOCK_TCP);
 
-//连接  与服务端的host和poet一致
+
+//连接到服务器
 if(!$client->connect('127.0.0.1',9501)){
     echo '连接失败';
-    die;
+    exit;
 }
 
-/**
- * PHP  CLi模式下的一个常量
- */
-fwrite(STDOUT,'请输入消息: '); //输入消息
-$msg = trim(fgets(STDIN)); //返回值就是输入的消息
+//php cli模式下
+fwrite(STDOUT,"请输入消息: ");
+$msg = trim(fgets(STDIN));
 
-//发送消息给 tcp 服务端
-$client->send($msg);
 
-//接收来自server服务端的返回消息
-$res = $client->recv();
-echo $res."\n";
+//向服务器发送数据
+if (!$client->send($msg))
+{
+    echo '发送失败';exit;
+}
+
+//从服务器接收数据
+$data = $client->recv();
+
+if (!$data)
+{
+    echo '接收失败';exit;
+}
+
+echo $data."\n";
+
+//关闭连接
+$client->close();

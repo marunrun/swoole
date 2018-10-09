@@ -1,12 +1,7 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018-09-02
- * Time: 10:36
- */
-/**
- *  SWOOLE_SOCK_TCP 代表TCP模式
+ *  SWOOLE_SOCK_UDP 代表UDP模式
  */
 $client = new swoole_client(SWOOLE_SOCK_UDP);
 
