@@ -17,11 +17,12 @@ $server->on('close', 'onClose');
  * @param $request
  */
 function onOpen ($server , $request){
-
-    foreach ($server->connections as $fd){
-        var_dump($fd);
+    var_dump($request->fd);
+    if($request->fd == 1){
+        swoole_timer_tick(2000,function($timer_id){
+                echo "2s , timerId :{$timer_id}";
+        });
     }
-//    print_r($request);
 }
 
 /**
@@ -30,7 +31,7 @@ function onOpen ($server , $request){
  * @param $frame
  */
 function onMessage ($server, $frame){
-//    var_dump($server->connections);
+
     $server->push($frame->fd,date("Y-m-d H:i:s",time())." data: ".$frame->data." finish:".$frame->finish." fd: ".$frame->fd." opcode: ".$frame->opcode);
 }
 

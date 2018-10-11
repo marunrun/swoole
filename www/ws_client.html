@@ -35,7 +35,7 @@
      * @param ev
      */
     websocket.onclose =function (ev) {
-        console.log('ws-server-closed')
+        console.log('ws server is closed  please refresh')
     };
 
     /**
@@ -44,7 +44,8 @@
      * @param e
      */
     websocket.onerror = function (ev,e) {
-        console.log("error: " +ev.data);
+        console.log(ev);
+        console.log("error: " +ev.error);
     };
 
 </script>
