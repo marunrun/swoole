@@ -17,7 +17,7 @@ $http->on('request',function ($request,$response){
     ];
 
 
-    swoole_async_writefile(__DIR__."/".date("Y-m-d",time()).".log",json_encode($content).PHP_EOL,function ($filename){
+    swoole_async_writefile(__DIR__ . "/" .date("Y-m-d",time()).".log",json_encode($content).PHP_EOL,function ($filename){
         echo "write ok".PHP_EOL;
     },FILE_APPEND);
 
