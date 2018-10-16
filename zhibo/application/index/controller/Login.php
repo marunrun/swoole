@@ -12,6 +12,7 @@ class Login
 {
     public function index()
     {
+
         //获取手机号和验证码
         $phoneNum = intval($_GET['phone_num']);
         $code     = intval($_GET['code']);
@@ -34,7 +35,7 @@ class Login
             $redis->set(Redis::userKey($phoneNum),$data);
             //一个验证码只能使用一次!! 验证成功后就从redis中删除
 //            $redis->del(Redis::userKey($phoneNum));
-
+//            setcookie('user',$phoneNum,time()+60*60*24*30,'/');
             return Util::show(config('code.success'),'登录成功' , $data );
         }
 
