@@ -38,7 +38,7 @@ class Send
 
 
 //        if($res->Code === 'OK'){
-//            $redis = new \Swoole\Coroutine\Redis();
+            $redis = new \Swoole\Coroutine\Redis();
 //            $redis->connect(config('redis.host'),config('redis.port'));
 //            $redis->auth(config('redis.password'));
 //            $redis->set(Redis::msmKey($phoneNum),$code , config('redis.codeTime'));

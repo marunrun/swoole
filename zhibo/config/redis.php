@@ -4,7 +4,7 @@
  * Redis相关配置
  */
 return [
-    'host'      => '127.0.0.1',
+    'host'      => '47.106.204.16',
     'port'      => 6379,
     'password'  => 'mr666...',
     'codeTime'  => 120,

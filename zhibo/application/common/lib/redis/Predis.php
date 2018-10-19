@@ -44,28 +44,46 @@ class Predis
     public function __call($name, $arguments)
     {
         // TODO: Implement __call() method.
-
-        $key = $arguments[0] ?: '';
-
-        if(!$key){
-            throw  new \Exception("key值必传");
-        }
-
-        $value = $arguments[1] ? : '';
-
-        if($value){
-            try {
-                return $this->redis->$name($key, $value);
-            }catch (\Exception $e){
-                return $e;
+        try {
+            switch (count($arguments)) {
+                case 1:
+                    return $this->redis->$name($arguments[0]);
+                    break;
+                case 2:
+                    return $this->redis->$name($arguments[0], $arguments[1]);
+                    break;
+                case 3:
+                    return $this->redis->$name($arguments[0], $arguments[1], $arguments[2]);
+                default :
+                    return 'parameter error';
             }
-        }else{
-            try {
-                return $this->redis->$name($key);
-            }catch (\Exception $e){
-                return $e;
-            }
+        } catch (\Exception $e) {
+            echo $e;
         }
+//        switch (count($arguments))
+
+//        $key = $arguments[0] ?: '';
+//
+//        if(!$key){
+//            throw  new \Exception("key值必传");
+//        }
+//
+//        $value = $arguments[1] ? : '';
+//
+//        if($value){
+//            try {
+//                return $this->redis->$name($key, $value);
+//            }catch (\Exception $e){
+//                return $e;
+//            }
+//        }else{
+//            try {
+//                return $this->redis->$name($key);
+//            }catch (\Exception $e){
+//                return $e;
+//            }
+//        }
+
     }
 
 
@@ -87,23 +105,23 @@ class Predis
      * @param int $time
      * @return bool|string
      */
-    public function set($key, $value, $time = 0)
-    {
-        if (!$key) {
-            return '';
-        }
-
-        if (is_array($value)) {
-            $value = json_encode($value);
-        }
-
-        if (!$time) {
-            return $this->redis->set($key, $value);
-        }
-
-        return $this->redis->set($key, $value, $time);
-    }
-
+//    public function set($key, $value, $time = 0)
+//    {
+//        if (!$key) {
+//            return '';
+//        }
+//
+//        if (is_array($value)) {
+//            $value = json_encode($value);
+//        }
+//
+//        if (!$time) {
+//            return $this->redis->set($key, $value);
+//        }
+//
+//        return $this->redis->set($key, $value, $time);
+//    }
+//
     /**
      * 获取值
      * @param $key
@@ -120,17 +138,17 @@ class Predis
      * @param $value
      * @return int|string
      */
-    public function hSet($key, $hKey, $value)
-    {
-        if (!$key || !$hKey) {
-            return '';
-        }
-        if (is_array($value)) {
-            $value = json_encode($value);
-        }
-
-        return $this->redis->hSet($key, $hKey, $value);
-    }
+//    public function hSet($key, $hKey, $value)
+//    {
+//        if (!$key || !$hKey) {
+//            return '';
+//        }
+//        if (is_array($value)) {
+//            $value = json_encode($value);
+//        }
+//
+//        return $this->redis->hSet($key, $hKey, $value);
+//    }
 
     /**
      * 批量设置哈希值

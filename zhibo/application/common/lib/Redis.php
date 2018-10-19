@@ -10,6 +10,11 @@ class Redis
      * @var string
      */
     public static $pre = 'sms_';
+
+    /**
+     * 用户信息的前缀
+     * @var string
+     */
     public static $userpre = 'user_';
     public  $redis = null;
 

@@ -4,6 +4,7 @@ class Ws
 {
     const HOST = '0.0.0.0';
     const PORT = '8811';
+    const CHART_PORT = '8812';
 
     private static $instance = null;
 
@@ -12,9 +13,8 @@ class Ws
     private function __construct()
     {
 
-
         $this->server = new swoole_websocket_server(self::HOST, self::PORT);
-
+        $this->server->listen(self::HOST,self::CHART_PORT,SWOOLE_SOCK_TCP);
         $this->server->set([
             'task_worker_num' => 4,
             'worker_num' => 4,
@@ -56,6 +56,10 @@ class Ws
         // 加载基础文件
         // require __DIR__ . '/../thinkphp/base.php';
         require __DIR__ . '/../thinkphp/start.php';
+        $ids = \app\common\lib\redis\Predis::getInstance()->sMembers(config('redis.live_redis_key'));
+        if($ids){
+            \app\common\lib\redis\Predis::getInstance()->del(config('redis.live_redis_key'));
+        }
     }
 
     /**
@@ -65,8 +69,8 @@ class Ws
      */
     public function onRequest($request, $response)
     {
+        $_SERVER = [];
         if (isset($request->server)) {
-            $_SERVER = [];
             foreach ($request->server as $k => $v) {
                 $_SERVER[strtoupper($k)] = $v;
             }
@@ -78,22 +82,24 @@ class Ws
             }
         }
 
+        $_GET = [];
         if (isset($request->get)) {
-            $_GET = [];
             foreach ($request->get as $k => $v) {
                 $_GET[$k] = $v;
             }
         }
 
+
+
+        $_FILES = [];
         if (isset($request->files)) {
-            $_FILES = [];
             foreach ($request->files as $k => $v) {
                 $_FILES[$k] = $v;
             }
         }
 
+        $_POST = [];
         if (isset($request->post)) {
-            $_POST = [];
             foreach ($request->post as $k => $v) {
                 $_POST[$k] = $v;
             }
@@ -154,7 +160,7 @@ class Ws
     {
         $obj = new \app\common\lib\task\Task();
         $method = $data['method'];
-        $res = $obj->$method($data['data']);
+        $res = $obj->$method($data['data'],$server);
 
         print_r($res);
 
